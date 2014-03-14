@@ -5,5 +5,21 @@
 </head>
 <body>
   <h1>My Todos</h1>
+
+  <ul>
+  <% todo_list.each_with_index do |todo, i| %>
+    <li><%= todo %></li>
+    <form action="/remove/<%= i %>" method="POST">
+      <input type='submit' value="Done" >
+    </form>
+  <% end %>
+  </ul>
+
+  <form action="/add" method="POST">
+    Add something: 
+    <input type="text" name="todo">
+    <input type="submit" value="Add">
+  </form>
+
 </body>
 </html>
