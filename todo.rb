@@ -1,21 +1,49 @@
 require 'sinatra'
 require 'sinatra/reloader'
 
-@@todos = ["Mow the lawn", "Walk the dog"]
+TODOS = []
+
+class Todo
+	attr_accessor :text, :done, :important
+
+	def to_s
+		self.text
+	end
+end
 
 get '/' do 
-  erb :todos, locals: {
-    todo_list: @@todos  
-  }
+	erb(:todos, locals: {todos: TODOS })
 end
 
-# http://localhost:4567/add?todo=Mow the lawn
+get '/important' do
+	TODOS[params[:todo].to_i].important = true
+	redirect '/'
+end
+
+get '/done' do
+	TODOS[params[:todo].to_i].done = true
+	redirect '/'
+end
+
 post '/add' do
-  @@todos << params[:todo]
-  redirect to('/')
+	t = Todo.new
+	t.text = params[:todo]
+	t.done = false
+	t.important = false
+
+	TODOS << t
+	redirect '/'
 end
 
-post '/remove/:i' do
-  @@todos.delete_at(params[:i].to_i)
-  redirect to('/')
+get '/delete' do
+	TODOS.delete_at(params[:todo].to_i)
+	redirect '/'
 end
+
+
+
+
+
+
+
+

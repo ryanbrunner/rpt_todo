@@ -1,25 +1,34 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <title></title>
-</head>
-<body>
-  <h1>My Todos</h1>
+	<style>
+		.done-true {
+			text-decoration: line-through;
+		}
+		.important-true {
+			color: red;
+		}
+	</style>
 
-  <ul>
-  <% todo_list.each_with_index do |todo, i| %>
-    <li><%= todo %></li>
-    <form action="/remove/<%= i %>" method="POST">
-      <input type='submit' value="Done" >
-    </form>
-  <% end %>
-  </ul>
+	<body>
+		<h1>Hello from a view!</h1>
+		<p>This is being rendered from a view</p>
 
-  <form action="/add" method="POST">
-    Add something: 
-    <input type="text" name="todo">
-    <input type="submit" value="Add">
-  </form>
 
-</body>
+		<ul>
+			<% todos.sort_by{|t| t.important ? 0 : 1 }.each_with_index do |todo, i| %>
+				<li class="done-<%= todo.done %> important-<%= todo.important %>">
+					<%= todo %>
+					<a href="/delete?todo=<%= i %>">delete</a>
+					|
+					<a href="/done?todo=<%= i %>">done</a>
+					|
+					<a href="/important?todo=<%= i %>">important</a>
+				</li>
+			<% end %>
+		</ul>
+
+		<form action="/add" method="POST">
+			<input type='text' name='todo' placeholder="Add a todo" />
+			<input type='submit' value='Add' />
+		</form>
+	</body>
 </html>
